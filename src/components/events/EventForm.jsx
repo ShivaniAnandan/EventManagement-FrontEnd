@@ -17,7 +17,7 @@ const EventForm = () => {
   const [isUpdate, setIsUpdate] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
 
   // Retrieve the token from local storage or context
   const token = localStorage.getItem('token');

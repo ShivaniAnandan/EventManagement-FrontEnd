@@ -8,7 +8,7 @@ const UserProfile = () => {
   const [profile, setProfile] = useState({});
   const [error, setError] = useState(null);
   const token = localStorage.getItem('token');
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
   const navigate = useNavigate();
 
   useEffect(() => {

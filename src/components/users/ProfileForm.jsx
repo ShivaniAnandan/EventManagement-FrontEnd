@@ -7,7 +7,7 @@ const ProfileForm = () => {
   const [profile, setProfile] = useState({ name: '', email: '', role: '' });
   const [error, setError] = useState(null);
   const token = localStorage.getItem('token');
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
 
   useEffect(() => {
     const fetchProfile = async () => {

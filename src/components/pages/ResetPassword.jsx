@@ -14,7 +14,7 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:4000/api/auth/reset-password/${token}`, { newPassword });
+      const response = await axios.post(`https://eventmanagement-backend-wbgv.onrender.com/api/auth/reset-password/${token}`, { newPassword });
       setIsSuccess(true);
       setMessage(response.data.message);
       setTimeout(() => {

@@ -20,7 +20,7 @@ const CreateTicket = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:4000/api/tickets', ticket, {
+    axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets', ticket, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     })
     .then(response => {

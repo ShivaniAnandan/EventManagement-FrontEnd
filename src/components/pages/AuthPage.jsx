@@ -8,7 +8,7 @@ const AuthPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', role: '' });
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState(''); // State for success message
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
   const navigate = useNavigate();
 
   const toggleDropdown = () => {

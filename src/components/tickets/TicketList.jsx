@@ -5,7 +5,7 @@ import AdminNavbar from '../pages/AdminNavbar';
 
 const TicketListing = () => {
   const [tickets, setTickets] = useState([]);
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
 
   useEffect(() => {
     axios.get(`${ApiUrl}/api/tickets/get-tickets`)

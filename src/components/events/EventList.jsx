@@ -12,7 +12,7 @@ const EventList = () => {
     category: '',
     priceRange: ''
   });
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
   const navigate = useNavigate(); // Initialize the useNavigate hook
 
   // Get the user role from localStorage or token

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 const AttendeesList = () => {
   const [attendees, setAttendees] = useState([]);
   const { id } = useParams();
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
   const token = localStorage.getItem('token');
 
   useEffect(() => {

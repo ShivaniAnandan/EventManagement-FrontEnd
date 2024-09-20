@@ -27,7 +27,7 @@ const PurchaseTicket = () => {
     const userId = user?._id;
 
     try {
-      const { data } = await axios.post('http://localhost:4000/api/tickets/purchase', {
+      const { data } = await axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/purchase', {
         userId,
         ticketId,
         quantity,

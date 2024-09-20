@@ -10,7 +10,7 @@ const EventDetails = () => {
   const [userError, setUserError] = useState(''); // State for user error message
   const { id } = useParams();
   const navigate = useNavigate();
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
   const token = localStorage.getItem('token');
 
   const user = JSON.parse(localStorage.getItem('user'));

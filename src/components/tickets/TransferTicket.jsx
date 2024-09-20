@@ -16,7 +16,7 @@ const TransferTicket = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put('http://localhost:4000/api/tickets/transfer', {
+    axios.put('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/transfer', {
       orderId,
       newUserId
     }, {

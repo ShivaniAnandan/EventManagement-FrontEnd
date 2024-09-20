@@ -7,7 +7,7 @@ const ForgetPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  const ApiUrl = "http://localhost:4000";
+  const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

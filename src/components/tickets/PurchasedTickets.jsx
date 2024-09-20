@@ -13,7 +13,7 @@ const PurchasedTickets = () => {
 
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/tickets', {
+        const response = await axios.get('https://eventmanagement-backend-wbgv.onrender.com/api/tickets', {
           params: { userId }
         });
         setOrders(response.data.orders);
@@ -46,7 +46,7 @@ const PurchasedTickets = () => {
 
   const handlePayNow = async (orderId) => {
     try {
-      const response = await axios.post('http://localhost:4000/api/tickets/webhook', { 
+      const response = await axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/webhook', { 
         orderId ,
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });

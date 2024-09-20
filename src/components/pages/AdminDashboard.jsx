@@ -16,7 +16,7 @@ const AdminDashboard = () => {
         }
 
         try {
-            const response = await axios.get('http://localhost:4000/api/admin/events', {
+            const response = await axios.get('https://eventmanagement-backend-wbgv.onrender.com/api/admin/events', {
                 headers: {
                     Authorization: `Bearer ${token}` // Include token in the request header
                 }
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
         const token = localStorage.getItem('token');
         try {
             const response = await axios.put(
-                'http://localhost:4000/api/admin/events/approve',
+                'https://eventmanagement-backend-wbgv.onrender.com/api/admin/events/approve',
                 { eventId, approve }, // Request body
                 {
                     headers: {

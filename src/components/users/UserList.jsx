@@ -5,7 +5,7 @@ import AdminNavbar from '../pages/AdminNavbar';
 const UserListing = () => {
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState('');
-    const ApiUrl = "http://localhost:4000";
+    const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
     const token = localStorage.getItem('token');
 
     useEffect(() => {
