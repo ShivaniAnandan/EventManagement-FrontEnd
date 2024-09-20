@@ -32,7 +32,7 @@ const EventDetails = () => {
 
     const fetchTickets = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/api/tickets/get-tickets`)
+        const response = await axios.get(`${ApiUrl}/api/tickets/get-tickets`);
         const eventTickets = response.data.tickets.filter(ticket => ticket.event === id);
         setTickets(eventTickets);
       } catch (error) {
@@ -120,6 +120,12 @@ const EventDetails = () => {
                     disabled={!event.isApproved}
                   >
                     Create Ticket
+                  </button>
+                  <button 
+                    onClick={() => navigate(`/events/${id}/edit`)} // Navigate to edit event page
+                    className="btn btn-secondary me-2"
+                  >
+                    Update Event
                   </button>
                   <button onClick={handleDelete} className="btn btn-danger">Delete Event</button>
                 </>

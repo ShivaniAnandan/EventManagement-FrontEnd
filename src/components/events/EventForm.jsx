@@ -63,31 +63,41 @@ const EventForm = () => {
   // Handle form input changes, including converting 12-hour time back to 24-hour format
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // If the input is time, convert it back to 24-hour format
+  
     if (name === 'time') {
-      const [time, modifier] = value.split(' ');
-      let [hours, minutes] = time.split(':');
-
-      if (modifier === 'PM' && hours !== '12') {
-        hours = parseInt(hours, 10) + 12;
+      let formattedTime = value;
+  
+      // If time is in 12-hour format with AM/PM, process it correctly
+      const [timePart, modifier] = value.split(' ');
+      if (timePart && modifier) {
+        let [hours, minutes] = timePart.split(':');
+        hours = parseInt(hours, 10);
+        
+        if (!minutes) minutes = '00'; // If minutes are missing, default to "00"
+  
+        // Convert to 24-hour format
+        if (modifier.toUpperCase() === 'PM' && hours < 12) {
+          hours += 12;
+        }
+        if (modifier.toUpperCase() === 'AM' && hours === 12) {
+          hours = 0;
+        }
+  
+        formattedTime = `${hours.toString().padStart(2, '0')}:${minutes}`;
       }
-      if (modifier === 'AM' && hours === '12') {
-        hours = '00';
-      }
-
-      const formattedTime = `${hours}:${minutes}`;
+  
       setEvent({
         ...event,
-        time: formattedTime // Store in 24-hour format
+        time: formattedTime, // Store in 24-hour format
       });
     } else {
       setEvent({
         ...event,
-        [name]: value
+        [name]: value,
       });
     }
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
