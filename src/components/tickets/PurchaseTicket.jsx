@@ -30,8 +30,7 @@ const PurchaseTicket = () => {
       const { data } = await axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/purchase', {
         userId,
         ticketId,
-        quantity,
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        quantity
       });
 
       const stripe = await stripePromise;

@@ -16,12 +16,7 @@ const TransferTicket = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/transfer', {
-      orderId,
-      newUserId
-    }, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    })
+    axios.put('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/transfer', { orderId,newUserId})
     .then(() => {
       setMessage('Ticket transferred successfully');
       setError('');

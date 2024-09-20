@@ -13,10 +13,7 @@ const CancelTicket = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.delete('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/cancel', {
-      data: { orderId },
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    })
+    axios.delete('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/cancel', { data: { orderId },})
     .then(() => {
       setMessage('Ticket canceled successfully');
       setError('');

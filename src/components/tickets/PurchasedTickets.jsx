@@ -44,23 +44,23 @@ const PurchasedTickets = () => {
     navigate(`/transferticket/${ticketId}`);
   };
 
-  const handlePayNow = async (orderId) => {
-    try {
-      const response = await axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/webhook', { 
-        orderId ,
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-      const { sessionId } = response.data;
+  // const handlePayNow = async (orderId) => {
+  //   try {
+  //     const response = await axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/webhook', { 
+  //       orderId ,
+  //       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+  //     });
+  //     const { sessionId } = response.data;
 
-      // Redirect to Stripe Checkout
-      window.location.href = sessionId; // Redirect to Stripe Checkout page
+  //     // Redirect to Stripe Checkout
+  //     window.location.href = sessionId; // Redirect to Stripe Checkout page
 
-      // Update the order status to 'success' after returning to the success page
-      localStorage.setItem('orderId', orderId); // Store the orderId in localStorage
-    } catch (error) {
-      console.error('Error processing payment:', error);
-    }
-  };
+  //     // Update the order status to 'success' after returning to the success page
+  //     localStorage.setItem('orderId', orderId); // Store the orderId in localStorage
+  //   } catch (error) {
+  //     console.error('Error processing payment:', error);
+  //   }
+  // };
 
   return (
     <>
@@ -78,7 +78,6 @@ const PurchasedTickets = () => {
                   <div>
                   <p>Quantity: {order.quantity}</p>
                   <p>Total Amount: Rs{order.totalAmount}</p>
-                  <p>Status: {order.paymentStatus}</p>
                   </div>
                 </Card.Text>
                 {/* {order.paymentStatus === 'pending' && (
