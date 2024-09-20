@@ -147,7 +147,7 @@ const EventForm = () => {
         name="time"
         value={event.time}
         onChange={handleChange}
-        placeholder="HH:MM AM/PM"
+        placeholder="HH:MM"
         required
       />
       <input
