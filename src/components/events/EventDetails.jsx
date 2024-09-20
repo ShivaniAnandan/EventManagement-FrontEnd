@@ -153,7 +153,7 @@ const EventDetails = () => {
                           <div className="card-body">
                             <h5 className="card-title">Ticket ID: {ticket._id}</h5>
                             <h6 className="card-subtitle mb-2 text-muted">Type: {ticket.type}</h6>
-                            <p className="card-text">Price: ${ticket.price}</p>
+                            <p className="card-text">Price: Rs{ticket.price}</p>
                             <p className="card-text">Available Quantity: {ticket.availableQuantity}</p>
                           </div>
                         </div>

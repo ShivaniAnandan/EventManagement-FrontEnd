@@ -29,7 +29,7 @@ const TicketListing = () => {
                   <h5 className="card-title">Ticket:{ticket._id}</h5>
                   <h5 className="card-title">Event: {ticket.event}</h5>
                   <h6 className="card-subtitle mb-2 text-muted">Type: {ticket.type}</h6>
-                  <p className="card-text">Price: ${ticket.price}</p>
+                  <p className="card-text">Price: Rs{ticket.price}</p>
                   <p className="card-text">Available Quantity: {ticket.availableQuantity}</p>
                 </div>
               </div>
