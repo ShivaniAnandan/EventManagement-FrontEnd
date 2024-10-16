@@ -24,15 +24,27 @@ import PaymentSuccess from './components/tickets/PaymentSuccess';
 import PaymentFailure from './components/tickets/PaymentFailure';
 import TransferTicket from './components/tickets/TransferTicket';
 import CancelTicket from './components/tickets/CancelTicket';
+import PublicRoute from './components/pages/PublicRoute';
 
 function App() {
+  const isAuthenticated = !!localStorage.getItem('token');
+ // Retrieve the user object from localStorage
+const user = JSON.parse(localStorage.getItem('user'));
+
+// Access only the role property
+const userrole = user ? user.role : null; // Check if user exists before accessing role
+
   return (
     <Router>
       <Routes>
         <Route path='*' element={<AuthPage />} />
         <Route path='/forget-password' element={<ForgetPassword />} />
         <Route path='/reset-password/:token' element={<ResetPassword />} />
-        <Route path='/auth' element={<AuthPage />} />
+        <Route path='/auth' element={
+          <PublicRoute  isAuthenticated={isAuthenticated} userrole={userrole}>
+          <AuthPage />
+          </PublicRoute>
+        } />
 
         <Route path='/userdashboard' element={
           <ProtectedRoute>

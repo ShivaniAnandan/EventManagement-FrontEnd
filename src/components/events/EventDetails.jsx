@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import '../styles/EventDetails.css'
+import UserNavbar from '../pages/UserNavbar';
+import AdminNavbar from '../pages/AdminNavbar';
 
 const EventDetails = () => {
   const [event, setEvent] = useState({});
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState([]); // State to hold tickets
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
   const [userError, setUserError] = useState(''); // State for user error message
@@ -12,8 +15,7 @@ const EventDetails = () => {
   const navigate = useNavigate();
   const ApiUrl = "https://eventmanagement-backend-wbgv.onrender.com";
   const token = localStorage.getItem('token');
-
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user')) || {};
   const userRole = user?.role;
   const userStatus = user?.isActive; // Assuming user has an `isActive` field
 
@@ -23,10 +25,12 @@ const EventDetails = () => {
         const response = await axios.get(`${ApiUrl}/api/events/${id}`);
         setEvent(response.data.event);
         if (!response.data.event.isApproved) {
-          setErrorMessage('This event is rejected, so you cannot create a ticket or book a ticket.'); // Set error message
+          setErrorMessage('This event is rejected, so you cannot create or book a ticket.'); // Set error message
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -37,8 +41,6 @@ const EventDetails = () => {
         setTickets(eventTickets);
       } catch (error) {
         console.error('Error fetching tickets:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -63,7 +65,15 @@ const EventDetails = () => {
     if (!userStatus) {
       setUserError('Your account is deactivated, so you cannot book a ticket.'); // Set user error message
     } else {
-      navigate(`/purchaseticket`);
+      // Automatically select the first available ticket ID
+      const ticketId = tickets.length > 0 ? tickets[0]._id : null;
+
+      if (ticketId) {
+        // Pass the ticketId when booking the ticket
+        navigate(`/purchaseticket`, { state: { ticketId } });
+      } else {
+        setUserError('No available tickets for this event.'); // Error if no tickets
+      }
     }
   };
 
@@ -77,6 +87,8 @@ const EventDetails = () => {
   };
 
   return (
+    <>
+     {userRole === 'organizer' ? <AdminNavbar /> : <UserNavbar />}
     <div className="container mt-5">
       <div style={{
         backgroundColor: '#f8f9fa',
@@ -85,15 +97,15 @@ const EventDetails = () => {
         borderRadius: '0.25rem',
         boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.15)'
       }}>
-        <div className="row">
-          <div className="col-md-4 mb-4 d-flex justify-content-center">
+        <div className="row flex">
+          <div>
             <img src={event.image} alt={event.title} className="img-fluid rounded" style={{ maxHeight: '300px', objectFit: 'cover' }} />
           </div>
 
-          <div className="col-md-8">
+          <div>
             <h1>{event.title}</h1>
             <p className="lead">{event.description}</p>
-            <p><strong>Date:</strong> {event.date} at {formatTimeTo12Hour(event.time)}</p>
+            <p><strong>Date:</strong>{new Date(event.date).toLocaleDateString()} at {formatTimeTo12Hour(event.time)}</p>
             <p><strong>Location:</strong> {event.location}</p>
             <p><strong>Price:</strong> Rs{event.price}</p>
 
@@ -108,7 +120,7 @@ const EventDetails = () => {
               </div>
             )}
 
-            <div className="mb-3">
+            <div className="mb-3 d-flex justify-content-center">
               {userRole === 'organizer' ? (
                 <>
                   <Link to={`/events/${id}/schedule`} className="btn btn-primary me-2">View Schedule</Link>
@@ -122,7 +134,7 @@ const EventDetails = () => {
                     Create Ticket
                   </button>
                   <button 
-                    onClick={() => navigate(`/events/${id}/edit`)} // Navigate to edit event page
+                    onClick={() => navigate(`/events/${id}/edit`)} 
                     className="btn btn-secondary me-2"
                   >
                     Update Event
@@ -139,36 +151,11 @@ const EventDetails = () => {
                 </button>
               )}
             </div>
-            
-            {userRole !== 'organizer' && (
-              <div className="mt-4">
-                <h2>Available Tickets</h2>
-                {loading ? (
-                  <p>Loading tickets...</p>
-                ) : tickets.length > 0 ? (
-                  <div className="row">
-                    {tickets.map(ticket => (
-                      <div className="col-md-4 mb-4" key={ticket._id}>
-                        <div className="card h-100">
-                          <div className="card-body">
-                            <h5 className="card-title">Ticket ID: {ticket._id}</h5>
-                            <h6 className="card-subtitle mb-2 text-muted">Type: {ticket.type}</h6>
-                            <p className="card-text">Price: Rs{ticket.price}</p>
-                            <p className="card-text">Available Quantity: {ticket.availableQuantity}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>No tickets available for this event.</p>
-                )}
-              </div>
-            )}
           </div>
         </div>
       </div>
     </div>
+    </>
   );
 };
 

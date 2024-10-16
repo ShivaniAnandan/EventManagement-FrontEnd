@@ -1,0 +1,34 @@
+.seat-booking-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+  }
+  
+  .seat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Adjust columns as needed */
+    gap: 10px;
+  }
+  
+  .summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .confirm-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  button {
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    cursor: pointer;
+  }
+  

@@ -1,0 +1,56 @@
+.event-card {
+    background-color: white;
+    border-radius: 18px;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 0 auto;
+    height: 450px;
+  }
+  
+  .event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  .event-card img {
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    height: 200px; /* Adjust based on your preference */
+    object-fit: cover;
+  }
+  
+  .card-body {
+    padding: 20px !important
+  }
+  
+  .card-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: rgb(43, 50, 43);
+  }
+  
+  .card-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .card-text small {
+    color: gray;
+  }
+  
+  .btn-primary {
+    margin-top: 10px;
+    background-color: #0D6EFD;
+    border: none;
+    padding: 10px 15px;
+  }
+  
+  .radio{
+    width: 10%;
+  }
+
+  .radio-label{
+    display: block;
+  }

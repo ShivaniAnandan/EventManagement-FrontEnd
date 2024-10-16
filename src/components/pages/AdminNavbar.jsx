@@ -20,7 +20,7 @@ const AdminNavbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-primary px-4">
             <Link className="navbar-brand" to="/admindashboard">
-                Admin Dashboard
+            <img src="https://www.shutterstock.com/image-vector/wellness-logo-template-260nw-1224528331.jpg" alt="logo" className='logo-img' />
             </Link>
             <button
                 className="navbar-toggler"

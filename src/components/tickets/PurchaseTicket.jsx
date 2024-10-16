@@ -1,30 +1,61 @@
 import React, { useState } from 'react';
+import { Grid, Button, Typography, Divider } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
-import { Container, Form, Button, Card } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
+import '../styles/SeatBooking.css'; // Custom styles
+import bookedChair from '../assets/booked-chair.png';
+import availableChair from '../assets/available-chair.jpg';
 
 const stripePromise = loadStripe('pk_test_51PyvGlP0TQcdrbfkPZP7y7vVbxZNFZoKusYGXuI9ntX1IE8fy7jYwOnn01VlbjDcCMBUmlgmlyDhOIx0l8rHEcOZ00nGV3x4Al');
 
-const PurchaseTicket = () => {
-  const [ticket, setTicket] = useState({
-    ticketId: '',
-    quantity: ''
+// Function to generate seats for a theater layout
+const generateSeats = () => {
+  const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L']; // 12 rows
+  const seats = [];
+  let id = 1;
+
+  rows.forEach((row) => {
+    for (let number = 1; number <= 10; number++) {
+      seats.push({ id, booked: false, row, number });
+      id++;
+    }
   });
 
-  const handleChange = (e) => {
-    setTicket({
-      ...ticket,
-      [e.target.name]: e.target.value
-    });
+  return seats;
+};
+
+const PurchaseTicket = () => {
+  const { state } = useLocation();
+  const ticketIdFromEventDetails = state?.ticketId || ''; // Get the ticketId passed from EventDetails
+  const [seats, setSeats] = useState(generateSeats());
+
+  const handleSeatClick = (seatId) => {
+    setSeats((prevSeats) =>
+      prevSeats.map((seat) =>
+        seat.id === seatId ? { ...seat, booked: !seat.booked } : seat
+      )
+    );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+   // Split seats into sections for the layout
+   const topSection = seats.filter((seat) => seat.row >= 'A' && seat.row <= 'C'); // Rows A to C
+   const leftSection = seats.filter((seat) => seat.row >= 'D' && seat.row <= 'F'); // Rows D to F
+   const bottomSection = seats.filter((seat) => seat.row >= 'G' && seat.row <= 'I'); // Rows G to I
+   const rightSection = seats.filter((seat) => seat.row >= 'J' && seat.row <= 'L'); // Rows J to L
 
-    const { ticketId, quantity } = ticket;
-
+  const handleSubmit = async () => {
+    const selectedSeats = seats.filter((seat) => seat.booked);
+    const quantity = selectedSeats.length;
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = user?._id;
+    const ticketId = ticketIdFromEventDetails;
+
+    if (quantity === 0) {
+      alert("Please select at least one seat!");
+      return;
+    }
 
     try {
       const { data } = await axios.post('https://eventmanagement-backend-wbgv.onrender.com/api/tickets/purchase', {
@@ -43,41 +74,190 @@ const PurchaseTicket = () => {
   };
 
   return (
-    <Container className="mt-5">
-      <Card>
-        <Card.Body>
-          <Card.Title className="text-center">Purchase Ticket</Card.Title>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="ticketId">
-              <Form.Label>Ticket ID</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="ticketId" 
-                value={ticket.ticketId} 
-                onChange={handleChange} 
-                placeholder="Enter Ticket ID" 
-                required 
-              />
-            </Form.Group>
-            <Form.Group controlId="quantity" className="mt-3">
-              <Form.Label>Quantity</Form.Label>
-              <Form.Control 
-                type="number" 
-                name="quantity" 
-                value={ticket.quantity} 
-                onChange={handleChange} 
-                placeholder="Enter Quantity" 
-                required 
-                min="1" 
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit" className="mt-4 w-100">
-              Purchase Ticket
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
-    </Container>
+    <div className="seat-booking-container">
+      <Typography variant="h4" align="center" gutterBottom>
+        Select Your Seats
+      </Typography>
+
+      <Grid container spacing={2} justifyContent="center">
+        {/* Left Column (Top and Bottom Sections) */}
+        <Grid item xs={6}>
+          <Typography variant="h6" align="center">
+            A - C
+          </Typography>
+          <Grid container spacing={1} justifyContent="center" columns={10}>
+            {topSection.map((seat) => (
+              <Grid item xs={1} key={seat.id}>
+                <Tooltip title={`Row ${seat.row}, Seat ${seat.number}`} arrow>
+                  <Button
+                    onClick={() => handleSeatClick(seat.id)}
+                    variant="text"
+                    color={seat.booked ? 'error' : 'primary'}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      backgroundColor: seat.booked ? 'transparent' : 'green',
+                      padding: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <img
+                      src={seat.booked ? bookedChair : availableChair}
+                      alt={seat.booked ? 'Booked' : 'Available'}
+                      style={{
+                        width: '100%',
+                        opacity: seat.booked ? 0.5 : 1,
+                        filter: seat.booked ? 'grayscale(100%)' : 'none',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Grid>
+            ))}
+          </Grid>
+
+          <Divider style={{ margin: '20px 0' }} />
+
+          <Typography variant="h6" align="center">
+            G - I
+          </Typography>
+          <Grid container spacing={1} justifyContent="center" columns={10}>
+            {bottomSection.map((seat) => (
+              <Grid item xs={1} key={seat.id}>
+                <Tooltip title={`Row ${seat.row}, Seat ${seat.number}`} arrow>
+                  <Button
+                    onClick={() => handleSeatClick(seat.id)}
+                    variant="text"
+                    color={seat.booked ? 'error' : 'primary'}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      backgroundColor: seat.booked ? 'transparent' : 'green',
+                      padding: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <img
+                      src={seat.booked ? bookedChair : availableChair}
+                      alt={seat.booked ? 'Booked' : 'Available'}
+                      style={{
+                        width: '100%',
+                        opacity: seat.booked ? 0.5 : 1,
+                        filter: seat.booked ? 'grayscale(100%)' : 'none',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+
+        {/* Right Column (Left and Right Sections) */}
+        <Grid item xs={6}>
+          <Typography variant="h6" align="center">
+            D - F
+          </Typography>
+          <Grid container spacing={1} justifyContent="center" columns={10}>
+            {leftSection.map((seat) => (
+              <Grid item xs={1} key={seat.id}>
+                <Tooltip title={`Row ${seat.row}, Seat ${seat.number}`} arrow>
+                  <Button
+                    onClick={() => handleSeatClick(seat.id)}
+                    variant="text"
+                    color={seat.booked ? 'error' : 'primary'}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      backgroundColor: seat.booked ? 'transparent' : 'green',
+                      padding: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <img
+                      src={seat.booked ? bookedChair : availableChair}
+                      alt={seat.booked ? 'Booked' : 'Available'}
+                      style={{
+                        width: '100%',
+                        opacity: seat.booked ? 0.5 : 1,
+                        filter: seat.booked ? 'grayscale(100%)' : 'none',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Grid>
+            ))}
+          </Grid>
+
+          <Divider style={{ margin: '20px 0' }} />
+
+          <Typography variant="h6" align="center">
+           J - L
+          </Typography>
+          <Grid container spacing={1} justifyContent="center" columns={10}>
+            {rightSection.map((seat) => (
+              <Grid item xs={1} key={seat.id}>
+                <Tooltip title={`Row ${seat.row}, Seat ${seat.number}`} arrow>
+                  <Button
+                    onClick={() => handleSeatClick(seat.id)}
+                    variant="text"
+                    color={seat.booked ? 'error' : 'primary'}
+                    style={{
+                      width: '60px',
+                      height: '60px',
+                      backgroundColor: seat.booked ? 'transparent' : 'green',
+                      padding: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <img
+                      src={seat.booked ? bookedChair : availableChair}
+                      alt={seat.booked ? 'Booked' : 'Available'}
+                      style={{
+                        width: '100%',
+                        opacity: seat.booked ? 0.5 : 1,
+                        filter: seat.booked ? 'grayscale(100%)' : 'none',
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <div className="summary">
+        {/* Displaying the total number of selected seats */}
+        <Typography variant="h6" align="center" style={{ marginTop: '20px' }}>
+          Total Seats Selected: {seats.filter(seat => seat.booked).length}
+        </Typography>
+
+        {/* Displaying the seat numbers */}
+        <Typography variant="h6" align="center" style={{ marginTop: '10px' }}>
+          Selected Seats: {seats.filter(seat => seat.booked).map(seat => seat.row + seat.number).join(', ') || 'None'}
+        </Typography>
+
+        {/* Button to confirm booking */}
+        <div className="confirm-button-container">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+          >
+            Confirm Booking
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

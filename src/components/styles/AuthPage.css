@@ -351,4 +351,42 @@ input:focus, select:focus {
     }
 }
 
+/* Loader styles */
+/* .loader {
+    border: 5px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 5px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  } */
+
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* full screen height */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* semi-transparent background */
+    z-index: 9999; /* ensures the loader stays on top */
+  }
+  
+  
+
 
